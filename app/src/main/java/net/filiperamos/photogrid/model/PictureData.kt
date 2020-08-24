@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 
 data class PictureData(
     val id: Long,
+    val title: String,
     val contentUri: Uri
 ) {
     companion object {

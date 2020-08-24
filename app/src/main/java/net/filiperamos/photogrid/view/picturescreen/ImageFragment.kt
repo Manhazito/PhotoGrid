@@ -58,8 +58,14 @@ class ImageFragment : Fragment() {
                 selectedImageView.visibility = View.VISIBLE
 
                 selectedImageView.setImageURI(picture.contentUri)
+
+                setTitle(picture.title)
             }
         })
+    }
+
+    private fun setTitle(title: String){
+        activity?.title = title
     }
 
     companion object {

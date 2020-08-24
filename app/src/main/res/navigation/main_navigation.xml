@@ -8,12 +8,15 @@
     <fragment
         android:id="@+id/imageFragment"
         android:name="net.filiperamos.photogrid.view.picturescreen.ImageFragment"
-        android:label="@string/photo"
+        android:label="{dynamicTitle}"
         tools:layout="@layout/fragment_image">
         <argument
             android:name="imageId"
             android:defaultValue="0L"
             app:argType="long" />
+        <argument
+            android:name="dynamicTitle"
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/listFragment"

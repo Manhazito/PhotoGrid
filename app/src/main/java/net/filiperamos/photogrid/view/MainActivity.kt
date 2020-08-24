@@ -37,10 +37,13 @@ import net.filiperamos.photogrid.view.listscreen.ListFragment
  * Started @ 15:00 - 22/08/2020
  * Stopped @ 16:00 - 22/08/2020
  *
+ * Started @ 11:00 - 23/08/2020
+ * Stopped @ 12:00 - 2#/08/2020
+ *
  * Started @ 11:00 - 24/08/2020
  * Stopped @ 12:30 - 24/08/2020
  *
- * TOTAL: 8h
+ * TOTAL: 10h
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController

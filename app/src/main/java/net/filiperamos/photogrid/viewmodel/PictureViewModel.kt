@@ -20,7 +20,7 @@ class PictureViewModel(application: Application) : BaseViewModel(application) {
             var loadedPicture: PictureData? = null
 
             val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            val projection = arrayOf(MediaStore.Images.Media._ID)
+            val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE)
             val selection = "${MediaStore.Images.Media._ID} == ?"
             val selectionArgs = arrayOf("$id")
 
@@ -40,16 +40,18 @@ class PictureViewModel(application: Application) : BaseViewModel(application) {
 
     private fun getImageFromCursor(cursor: Cursor): PictureData? {
         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+        val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE)
         var picture: PictureData? = null
 
         if (cursor.count > 0) {
             cursor.moveToFirst()
             val id = cursor.getLong(idColumn)
+            val title = cursor.getString(titleColumn)
             val contentUri = ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 id
             )
-            picture = PictureData(id, contentUri)
+            picture = PictureData(id, title, contentUri)
         }
 
         return picture

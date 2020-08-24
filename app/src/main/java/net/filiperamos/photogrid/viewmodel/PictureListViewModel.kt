@@ -7,6 +7,7 @@ import android.content.IntentSender
 import android.database.Cursor
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
             var pictureList = mutableListOf<PictureData>()
 
             val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            val projection = arrayOf(MediaStore.Images.Media._ID)
+            val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE)
             val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} ASC"
 
             getApplication<Application>().contentResolver.query(
@@ -51,16 +52,19 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
         images = mutableListOf()
 
         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+        val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE)
 
         while (cursor.moveToNext()) {
             val id = cursor.getLong(idColumn)
+            val title = cursor.getString(titleColumn)
+            Log.d(TAG, "$id title: $title")
 
             val contentUri = ContentUris.withAppendedId(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 id
             )
 
-            val image = PictureData(id, contentUri)
+            val image = PictureData(id, title, contentUri)
             images.add(image)
 
         }

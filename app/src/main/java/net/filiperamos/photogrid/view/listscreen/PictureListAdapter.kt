@@ -1,7 +1,6 @@
 package net.filiperamos.photogrid.view.listscreen
 
 import android.os.Build
-import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
@@ -30,21 +29,21 @@ class PictureListAdapter(private val imageList: ArrayList<PictureData>, val dele
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val pictureData = imageList[position]
-        Log.d(TAG, "$position: ${pictureData.id} | ${pictureData.contentUri.path}")
         val bmp = holder.itemView.context.contentResolver.loadThumbnail(
-            imageList[position].contentUri,
+            pictureData.contentUri,
             Size(250, 250),
             null
         )
 
         holder.view.imageView.setImageBitmap(bmp)
-        holder.view.imageIdTextView.text = "${imageList[position].id}"
+        holder.view.imageIdTextView.text = "${pictureData.id}"
+        holder.view.imageTitleTextView.text = pictureData.title
 
         holder.view.imageView.setOnClickListener {
             onImageClickListener(holder.view.root)
         }
         holder.view.imageView.setOnLongClickListener {
-            deletePicture(imageList[position].id)
+            deletePicture(pictureData.id)
             true
         }
     }
@@ -57,10 +56,11 @@ class PictureListAdapter(private val imageList: ArrayList<PictureData>, val dele
         notifyDataSetChanged()
     }
 
-    fun onImageClickListener(view: View) {
-        Log.d(TAG, "Click!")
-        val action = ListFragmentDirections.actionListFragmentToImageFragment()
+    private fun onImageClickListener(view: View) {
+        val title = view.imageTitleTextView.text.toString()
+        val action = ListFragmentDirections.actionListFragmentToImageFragment(title)
         action.imageId = view.imageIdTextView.text.toString().toLong()
+
         Navigation.findNavController(view).navigate(action)
     }
 
