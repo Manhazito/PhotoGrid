@@ -15,6 +15,9 @@ import net.filiperamos.photogrid.R
 import net.filiperamos.photogrid.databinding.ItemImageBinding
 import net.filiperamos.photogrid.model.PictureData
 
+/**
+ * Picture list recycler view adapter
+ */
 class PictureListAdapter(private val imageList: ArrayList<PictureData>, val deletePicture: (Long) -> Unit) :
     ListAdapter<PictureData, PictureListAdapter.ListViewHolder>(PictureData.DiffCallback) {
 
@@ -36,7 +39,10 @@ class PictureListAdapter(private val imageList: ArrayList<PictureData>, val dele
         )
 
         holder.view.imageView.setImageBitmap(bmp)
+
+        // Store the picture ID on a hidden textView
         holder.view.imageIdTextView.text = "${pictureData.id}"
+        // Store the picture title on a hidden textView
         holder.view.imageTitleTextView.text = pictureData.title
 
         holder.view.imageView.setOnClickListener {
@@ -56,6 +62,10 @@ class PictureListAdapter(private val imageList: ArrayList<PictureData>, val dele
         notifyDataSetChanged()
     }
 
+    /**
+     * Opens the selected picture
+     * Fetches the picture ID and Title from hidden textViews
+     */
     private fun onImageClickListener(view: View) {
         val title = view.imageTitleTextView.text.toString()
         val action = ListFragmentDirections.actionListFragmentToImageFragment(title)

@@ -3,6 +3,9 @@ package net.filiperamos.photogrid.model
 import android.net.Uri
 import androidx.recyclerview.widget.DiffUtil
 
+/**
+ * Data class for the loaded pictures
+ */
 data class PictureData(
     val id: Long,
     val title: String,

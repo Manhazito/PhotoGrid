@@ -8,11 +8,17 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import net.filiperamos.photogrid.model.PictureData
 
+/**
+ * View model exposing observables related to a single picture
+ */
 class PictureViewModel(application: Application) : BaseViewModel(application) {
     val picture = MutableLiveData<PictureData>()
     val loading = MutableLiveData<Boolean>()
     val error = MutableLiveData<Boolean>()
 
+    /**
+     * Manages the fetch of a single picture
+     */
     fun loadImage(id: Long) {
         loading.value = true
 
@@ -38,6 +44,9 @@ class PictureViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
+    /**
+     * Uses the query cursor to access the picture
+     */
     private fun getImageFromCursor(cursor: Cursor): PictureData? {
         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
         val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE)
@@ -57,6 +66,11 @@ class PictureViewModel(application: Application) : BaseViewModel(application) {
         return picture
     }
 
+    /**
+     * Emit picture value.
+     * Emit loading value as false
+     * Emit loading error value
+     */
     private fun imageLoaded(image: PictureData?) {
         picture.value = image
         loading.value = false

@@ -45,8 +45,16 @@ import net.filiperamos.photogrid.view.listscreen.ListFragment
  *
  * TOTAL: 10h
  */
+
+/**
+ * Single Main Activity used as a fragment container
+ * Controls the permissions and the process of taking and saving a picture
+ */
 class MainActivity : AppCompatActivity() {
+    // Initialized inside onCreate
     private lateinit var navController: NavController
+
+    // Picture taken URI
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +67,14 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
     }
 
+    /**
+     * Enables back arrow to navigate up
+     */
     override fun onSupportNavigateUp(): Boolean = NavigationUI.navigateUp(navController, null)
 
+    /**
+     * Check permissions to read/write pictures on the phone
+     */
     private fun checkPermissions() {
         if (!hasStoragePermissions()) {
             if (shouldShowStoragePermissionsRationale()) {
@@ -105,12 +119,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Check again the photos stored on the device
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun reloadListFragmentData() {
         val activeFragment = fragment.childFragmentManager.primaryNavigationFragment
         (activeFragment as? ListFragment)?.loadData()
     }
 
+    /**
+     * Uses camera intent to take a picture
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun takePhoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->

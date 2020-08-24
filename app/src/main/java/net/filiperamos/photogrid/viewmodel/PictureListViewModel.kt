@@ -13,6 +13,9 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.launch
 import net.filiperamos.photogrid.model.PictureData
 
+/**
+ * View model exposing observables related to the list of Pictures
+ */
 class PictureListViewModel(application: Application) : BaseViewModel(application) {
     val pictures = MutableLiveData<List<PictureData>>()
     val empty = MutableLiveData<Boolean>()
@@ -22,7 +25,9 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
     private var pendingDeleteImageId: Long? = null
     private var images = mutableListOf<PictureData>()
 
-
+    /**
+     * Manages the fetch of all pictures
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun refresh() {
         loading.value = true
@@ -48,6 +53,9 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
         }
     }
 
+    /**
+     * Uses the query cursor to access the pictures
+     */
     private fun addImagesFromCursor(cursor: Cursor): MutableList<PictureData> {
         images = mutableListOf()
 
@@ -72,12 +80,21 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
         return images
     }
 
+    /**
+     * Emit picture list value.
+     * Emit empty list value
+     * Emit loading value as false
+     */
     private fun dataRetrieved(pictureList: List<PictureData>) {
         pictures.value = pictureList
         empty.value = pictureList.isEmpty()
         loading.value = false
     }
 
+    /**
+     * Tries to delete a picture
+     * Asks for permission if deletion not authorized
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun deletePicture(id: Long) {
         loading.value = true
@@ -107,6 +124,9 @@ class PictureListViewModel(application: Application) : BaseViewModel(application
         }
     }
 
+    /**
+     * Deletes the previously non deleted picture (after permission granted)
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun deletePendingPicture() {
         pendingDeleteImageId?.let {

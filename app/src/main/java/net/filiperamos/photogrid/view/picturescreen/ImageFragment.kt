@@ -11,7 +11,11 @@ import kotlinx.android.synthetic.main.fragment_list.loadingProgressBar
 import net.filiperamos.photogrid.R
 import net.filiperamos.photogrid.viewmodel.PictureViewModel
 
+/**
+ * Fragment to show the selected image
+ */
 class ImageFragment : Fragment() {
+    // Initialized inside onViewCreated
     private lateinit var vm: PictureViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,6 +36,9 @@ class ImageFragment : Fragment() {
         vm.loadImage(imageId)
     }
 
+    /**
+     * Observes the view model properties and updates the UI as needed
+     */
     private fun observe() {
         vm.loading.observe(viewLifecycleOwner, {
             it?.let { isLoading ->
@@ -58,14 +65,8 @@ class ImageFragment : Fragment() {
                 selectedImageView.visibility = View.VISIBLE
 
                 selectedImageView.setImageURI(picture.contentUri)
-
-                setTitle(picture.title)
             }
         })
-    }
-
-    private fun setTitle(title: String){
-        activity?.title = title
     }
 
     companion object {

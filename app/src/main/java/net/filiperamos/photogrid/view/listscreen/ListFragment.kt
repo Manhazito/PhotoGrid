@@ -16,13 +16,20 @@ import net.filiperamos.photogrid.R
 import net.filiperamos.photogrid.view.MainActivity
 import net.filiperamos.photogrid.viewmodel.PictureListViewModel
 
+/**
+ * Grid list fragment
+ */
 class ListFragment : Fragment() {
+    // Initialized in onViewCreated
     private lateinit var vm: PictureListViewModel
     private lateinit var picturesAdapter: PictureListAdapter
+
     private var canUseCamera = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
+
+        // Check if device has a camera
         canUseCamera = activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) ?: false
 
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -46,9 +53,12 @@ class ListFragment : Fragment() {
         }
 
         observe()
-        loadData()
     }
 
+    /**
+     * Check the photos stored on the device
+     * Useful to do it here, e.g, when some picture is deleted outside the app
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onResume() {
         super.onResume()
@@ -60,6 +70,9 @@ class ListFragment : Fragment() {
         vm.refresh()
     }
 
+    /**
+     * Observes the view model properties and updates the UI as needed
+     */
     private fun observe() {
         vm.loading.observe(viewLifecycleOwner, {
             it?.let { isLoading ->
@@ -83,6 +96,7 @@ class ListFragment : Fragment() {
             }
         })
 
+        // We need special permission to delete photos not owned by our app
         vm.permissionNeededForDelete.observe(viewLifecycleOwner, { intentSender ->
             intentSender?.let {
                 startIntentSenderForResult(
@@ -98,6 +112,9 @@ class ListFragment : Fragment() {
         })
     }
 
+    /**
+     * Deletes a picture
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun deletePicture(id: Long) {
         context?.let {
@@ -112,6 +129,9 @@ class ListFragment : Fragment() {
         }
     }
 
+    /**
+     * Checks permission to delete picture
+     */
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -120,6 +140,9 @@ class ListFragment : Fragment() {
         }
     }
 
+    /**
+     * Creates the main menu with a button to take picture, only if the device has a camera
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         if (canUseCamera) {
